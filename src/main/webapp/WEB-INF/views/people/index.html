@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmls:th="http://thymeleaf.org"
+      xmlns:xmls="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>People List</title>
+</head>
+<body>
+<div th:each="person : ${people}">
+    <!--/*@thymesVar id="person" type="ru.redtoss.models.Person"*/-->
+    <a th:href="@{/people/{id}(id=${person.id})}"
+       th:text="'Name: ' + ${person.name} + ', age: ' + ${person.age}">value</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmls:th="http://thymeleaf.org"
+      xmlns:xmls="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>People List</title>
+</head>
+<body>
+<div th:each="book: ${books}">
+    <a th:href="@{/book/{id}(id=book.getId())}">
+        th:text="'Name: ' + ${person.getName()} + ', ' + 'age: ' + ${person.getAge()}">value
+    </a>
+</div>
+</body>
+</html>
