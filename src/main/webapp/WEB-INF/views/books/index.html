@@ -1,15 +1,210 @@
 <!DOCTYPE html>
-<html lang="en" xmls:th="http://thymeleaf.org"
-      xmlns:xmls="http://www.w3.org/1999/xhtml">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>People List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог книг</title>
+    <style>
+        :root {
+            --pastel-blue: #d4e1ff;
+            --pastel-lavender: #e8d7ff;
+            --pastel-mint: #d7f0e9;
+            --pastel-peach: #ffdfd6;
+            --pastel-text: #5d5d5d;
+            --pastel-dark: #7a7a7a;
+            --pastel-shadow: rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #fafafa;
+            color: var(--pastel-text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: var(--pastel-dark);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 500;
+            border-bottom: 2px solid var(--pastel-lavender);
+            padding-bottom: 10px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .book-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--pastel-shadow);
+            padding: 25px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(212, 225, 255, 0.5);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+            border-color: var(--pastel-lavender);
+        }
+
+        .book-id {
+            font-size: 13px;
+            color: var(--pastel-dark);
+            margin-bottom: 8px;
+            opacity: 0.7;
+        }
+
+        .book-title {
+            font-size: 1.2em;
+            color: var(--pastel-dark);
+            margin-bottom: 12px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .book-author {
+            color: var(--pastel-text);
+            margin-bottom: 15px;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .book-author::before {
+            content: "✎";
+            font-style: normal;
+            opacity: 0.6;
+        }
+
+        .book-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--pastel-text);
+            font-size: 14px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed var(--pastel-blue);
+        }
+
+        .book-year {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .book-year::before {
+            content: "📅";
+        }
+
+        .book-owner {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-style: italic;
+        }
+
+        .book-owner::before {
+            content: "👤";
+        }
+
+        .no-books {
+            text-align: center;
+            color: var(--pastel-dark);
+            font-style: italic;
+            grid-column: 1 / -1;
+            padding: 40px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--pastel-shadow);
+        }
+
+        .add-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: var(--pastel-lavender);
+            color: var(--pastel-dark);
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(232, 215, 255, 0.4);
+        }
+
+        .add-btn:hover {
+            background-color: #d9c4f5;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(232, 215, 255, 0.5);
+        }
+
+        .add-btn::before {
+            content: "+";
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .book-list {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
 </head>
 <body>
-<div th:each="book: ${books}">
-    <a th:href="@{/book/{id}(id=book.getId())}">
-        th:text="'Name: ' + ${person.getName()} + ', ' + 'age: ' + ${person.getAge()}">value
-    </a>
+<div class="container">
+    <div class="header">
+        <h1>Каталог книг</h1>
+        <a th:href="@{/books/add}" class="add-btn">Добавить книгу</a>
+    </div>
+
+    <div class="book-list">
+        <div th:each="book : ${books}" class="book-card">
+            <a th:href="@{/books/{id}(id = ${book.book_id})}" style="text-decoration: none; color: inherit;">
+                <div class="book-id">ID: <span th:text="${book.book_id}"></span></div>
+                <div class="book-title" th:text="${book.title}"></div>
+                <div class="book-author" th:text="${book.author}"></div>
+
+                <div class="book-meta">
+                    <span class="book-year" th:text="${book.year}"></span>
+                    <span class="book-owner" th:text="${book.owner?.name} ?: 'Без владельца'"></span>
+                </div>
+            </a>
+        </div>
+    </div>
 </div>
 </body>
 </html>

@@ -1,15 +1,184 @@
 <!DOCTYPE html>
-<html lang="en" xmls:th="http://thymeleaf.org"
-      xmlns:xmls="http://www.w3.org/1999/xhtml">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>People List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список людей</title>
+    <style>
+        :root {
+            --pastel-blue: #d4e1ff;
+            --pastel-lavender: #e8d7ff;
+            --pastel-mint: #d7f0e9;
+            --pastel-peach: #ffdfd6;
+            --pastel-text: #5d5d5d;
+            --pastel-dark: #7a7a7a;
+            --pastel-shadow: rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 20px;
+            color: var(--pastel-text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: var(--pastel-dark);
+            text-align: center;
+            margin-bottom: 40px;
+            font-weight: 500;
+            font-size: 28px;
+        }
+
+        .person-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .person-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--pastel-shadow);
+            padding: 25px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            border: 1px solid rgba(212, 225, 255, 0.5);
+        }
+
+        .person-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+            border-color: var(--pastel-lavender);
+        }
+
+        .person-id {
+            font-size: 13px;
+            color: var(--pastel-dark);
+            margin-bottom: 8px;
+            opacity: 0.7;
+        }
+
+        .person-name {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--pastel-dark);
+            margin-bottom: 12px;
+        }
+
+        .person-age {
+            color: var(--pastel-text);
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .person-age::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--pastel-lavender);
+        }
+
+        .no-persons {
+            text-align: center;
+            color: var(--pastel-dark);
+            font-style: italic;
+            margin-top: 30px;
+            padding: 30px;
+            background-color: white;
+            border-radius: 12px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .add-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background-color: var(--pastel-lavender);
+            color: var(--pastel-dark);
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(232, 215, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            background-color: #d9c4f5;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(232, 215, 255, 0.5);
+        }
+
+        .add-btn:active {
+            transform: translateY(0);
+        }
+
+        .add-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .person-container {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 24px;
+                margin-bottom: 30px;
+            }
+        }
+    </style>
 </head>
 <body>
-<div th:each="person : ${people}">
-    <!--/*@thymesVar id="person" type="ru.redtoss.models.Person"*/-->
-    <a th:href="@{/people/{id}(id=${person.id})}"
-       th:text="'Name: ' + ${person.name} + ', age: ' + ${person.age}">value</a>
+<div class="container">
+    <h1>Список людей</h1>
+
+    <div class="person-container">
+        <div th:each="person : ${people}" class="person-card">
+            <a th:href="@{/people/{id}(id = ${person.person_id})}" style="text-decoration: none; color: inherit;">
+                <div class="person-id">ID: <span th:text="${person.person_id}"></span></div>
+                <div class="person-name" th:text="${person.name}"></div>
+                <div class="person-age">Возраст: <span th:text="${person.age}"></span> лет</div>
+            </a>
+        </div>
+
+        <div th:if="${people.empty}" class="no-persons">
+            Нет зарегистрированных пользователей
+        </div>
+    </div>
+
+    <div class="actions">
+        <a href="/people/add-person" class="add-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>
+            Добавить пользователя
+        </a>
+    </div>
 </div>
 </body>
 </html>

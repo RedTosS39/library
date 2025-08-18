@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Просмотр книги</title>
+    <style>
+        :root {
+            --pastel-blue: #d4e1ff;
+            --pastel-lavender: #e8d7ff;
+            --pastel-mint: #d7f0e9;
+            --pastel-peach: #ffdfd6;
+            --pastel-text: #5d5d5d;
+            --pastel-dark: #7a7a7a;
+            --pastel-shadow: rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 20px;
+            color: var(--pastel-text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .book-container {
+            max-width: 600px;
+            width: 100%;
+            margin: 30px 0;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px var(--pastel-shadow);
+            overflow: hidden;
+            border: 1px solid rgba(212, 225, 255, 0.5);
+            padding: 30px;
+        }
+
+        h1 {
+            color: var(--pastel-dark);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .book-detail {
+            display: flex;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(212, 225, 255, 0.5);
+        }
+
+        .book-detail:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            width: 150px;
+            color: var(--pastel-dark);
+            font-size: 15px;
+        }
+
+        .detail-value {
+            flex: 1;
+            font-size: 16px;
+        }
+
+        .owner-value {
+            font-style: italic;
+            color: var(--pastel-dark);
+        }
+
+        .no-owner {
+            color: var(--pastel-peach);
+            font-style: italic;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 200px;
+            box-shadow: 0 4px 12px var(--pastel-shadow);
+        }
+
+        .back-button {
+            background-color: var(--pastel-blue);
+            color: var(--pastel-dark);
+        }
+
+        .back-button:hover {
+            background-color: #c2d3ff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(212, 225, 255, 0.4);
+        }
+
+        .edit-button {
+            background-color: var(--pastel-mint);
+            color: var(--pastel-dark);
+        }
+
+        .edit-button:hover {
+            background-color: #c0e5d8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(215, 240, 233, 0.4);
+        }
+
+        .delete-button {
+            background-color: var(--pastel-peach);
+            color: var(--pastel-dark);
+        }
+
+        .delete-button:hover {
+            background-color: #f5c9bb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 223, 214, 0.4);
+        }
+
+        .not-found {
+            text-align: center;
+            color: var(--pastel-dark);
+            padding: 40px;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px var(--pastel-shadow);
+        }
+
+        @media (max-width: 600px) {
+            .book-container {
+                padding: 20px;
+            }
+
+            .buttons-container {
+                flex-direction: column;
+            }
+
+            .action-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div th:if="${book != null}" class="book-container">
+    <h1>Информация о книге</h1>
+
+    <div class="book-detail">
+        <div class="detail-label">ID:</div>
+        <div class="detail-value" th:text="${book.book_id}"></div>
+    </div>
+
+    <div class="book-detail">
+        <div class="detail-label">Название:</div>
+        <div class="detail-value" th:text="${book.title}"></div>
+    </div>
+
+    <div class="book-detail">
+        <div class="detail-label">Автор:</div>
+        <div class="detail-value" th:text="${book.author}"></div>
+    </div>
+
+    <div class="book-detail">
+        <div class="detail-label">Год издания:</div>
+        <div class="detail-value" th:text="${book.year}"></div>
+    </div>
+
+    <div class="book-detail">
+        <div class="detail-label">Владелец:</div>
+        <div class="detail-value">
+            <span class="owner-value" th:text="${book.owner?.name}" th:if="${book.owner != null}"></span>
+            <span class="no-owner" th:if="${book.owner == null}">Нет владельца</span>
+        </div>
+    </div>
+</div>
+
+<div th:if="${book == null}" class="not-found">
+    <h1>Книга не найдена</h1>
+    <p>Запрошенная книга не существует или была удалена</p>
+</div>
+
+<div class="buttons-container" th:if="${book != null}">
+    <a th:href="@{/books/{id}/edit-book(id=${book.book_id})}" class="action-button edit-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+        </svg>
+        Редактировать
+    </a>
+
+    <form th:method="DELETE" th:action="@{/books/{id}(id=${book.book_id})}" class="delete-form">
+        <button type="submit" class="action-button delete-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                <path fill-rule="evenodd"
+                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+            </svg>
+            Удалить
+        </button>
+    </form>
+
+    <a href="/books" class="action-button back-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                  d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+        </svg>
+        Назад
+    </a>
+</div>
+
+<script>
+    // Подтверждение удаления
+    document.querySelectorAll('.delete-form').forEach(form => {
+        form.addEventListener('submit', function (e) {
+            if (!confirm('Вы уверены, что хотите удалить эту книгу?')) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+</body>
+</html>
