@@ -5,17 +5,21 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.redtoss.library.models.Book;
+import ru.redtoss.library.models.Person;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class BookDao {
 
     private final JdbcTemplate jdbcTemplate;
+    private final PersonDao personDao;
 
     @Autowired
-    public BookDao(JdbcTemplate jdbcTemplate) {
+    public BookDao(JdbcTemplate jdbcTemplate, PersonDao personDao) {
         this.jdbcTemplate = jdbcTemplate;
+        this.personDao = personDao;
     }
 
     public List<Book> getBooks() {
@@ -34,9 +38,17 @@ public class BookDao {
     }
 
 
-    public void addBook() {
-        Book book = new Book();
+    public void addBook(Book book) {
         jdbcTemplate.update("INSERT INTO book (title, author, year) VALUES (?, ?, ?)",
                 book.getTitle(), book.getAuthor(), book.getYear());
+    }
+
+    public void deleteBook(int id) {
+        jdbcTemplate.update("DELETE FROM book WHERE book_id = ?", id);
+    }
+
+
+    public void changeOwner(Person person, int id) {
+
     }
 }

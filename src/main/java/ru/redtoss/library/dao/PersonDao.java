@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import ru.redtoss.library.models.Book;
 import ru.redtoss.library.models.Person;
 
 import java.util.List;
@@ -42,5 +43,11 @@ public class PersonDao {
 
     public void deletePerson(int id) {
         jdbcTemplate.update("DELETE FROM person WHERE person_id=?", id);
+    }
+
+    public List<Book> getBooksByPersonId(int id) {
+        return jdbcTemplate.query("SELECT * FROM person p JOIN book b ON(p.person_id = b.person_id) WHERE p.person_id=?",
+                new Object[]{id},
+                new BeanPropertyRowMapper<>(Book.class));
     }
 }

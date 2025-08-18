@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.redtoss.library.dao.BookDao;
+import ru.redtoss.library.dao.PersonDao;
 import ru.redtoss.library.models.Book;
 
 @Controller
@@ -14,6 +15,7 @@ import ru.redtoss.library.models.Book;
 public class BookController {
 
     private final BookDao bookDao;
+
 
     @Autowired
     public BookController(BookDao bookDao) {
@@ -54,6 +56,13 @@ public class BookController {
     }
 
 
+    /*
+     * ModelAttribute делает 3 вещи:
+     * 1. Создает объект класса Person
+     * 2. Заполняет поля класса Person (Person.setName(name) итд)
+     * 3. Добавляет класс в Model, с ключем "person"
+     */
+
     //show form
     @GetMapping("/add-book")
     public String addBook(@ModelAttribute("book") Book book) {
@@ -61,16 +70,22 @@ public class BookController {
     }
 
     @PostMapping()
-    public String addBook(@Valid Book book, Model model, BindingResult bindingResult) {
+    public String addBook(@ModelAttribute("book") @Valid Book book,
+                          Model model,
+                          BindingResult bindingResult) {
 
         model.addAttribute("book", book);
         if (bindingResult.hasErrors()) {
             return "books/add-book";
         }
 
-        bookDao.addBook();
+        bookDao.addBook(book);
         return "redirect:/books";
     }
 
-
+    @DeleteMapping("/{id}")
+    public String deleteBook(@PathVariable(value = "id") int id) {
+        bookDao.deleteBook(id);
+        return "redirect:/books";
+    }
 }

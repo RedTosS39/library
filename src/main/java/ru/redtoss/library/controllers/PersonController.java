@@ -22,12 +22,15 @@ public class PersonController {
     @GetMapping(produces = "text/html;charset=UTF-8")
     public String getPeople(Model model) {
         model.addAttribute("people", personDao.getPersonList());
+
         return "people/index";
     }
 
-    @GetMapping(value = "/{person_id}", produces = "text/html;charset=UTF-8")
-    public String getPerson(@PathVariable("person_id") int person_id, Model model) {
-        model.addAttribute("person", personDao.getPerson(person_id));
+    @GetMapping(value = "/{person_id}")
+    public String getPerson(@PathVariable("person_id") int id, Model model) {
+        model.addAttribute("person", personDao.getPerson(id));
+        model.addAttribute("books", personDao.getBooksByPersonId(id));
+        System.out.println(personDao.getBooksByPersonId(id));
         return "people/person";
     }
 
@@ -39,6 +42,12 @@ public class PersonController {
 
 
     //Добавляем пользователя
+    /*
+     * ModelAttribute делает 3 вещи:
+     * 1. Создает объект класса Person
+     * 2. Заполняет поля класса Person (Person.setName(name) итд)
+     * 3. Добавляет класс в Model, с ключем "person"
+     */
     @PostMapping
     public String addPersonForm(@ModelAttribute("person") @Valid Person person,
                                 Model model,

@@ -106,11 +106,62 @@
             font-size: 16px;
         }
 
+        /* Стили для блока книг */
+        .books-container {
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto 30px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px var(--pastel-shadow);
+            padding: 30px;
+        }
+
+        .section-title {
+            color: var(--pastel-dark);
+            font-size: 20px;
+            margin: 0 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(212, 225, 255, 0.5);
+        }
+
+        .book-item {
+            padding: 16px;
+            margin-bottom: 12px;
+            background-color: var(--pastel-mint);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .book-item:hover {
+            background-color: #c0e5d8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(215, 240, 233, 0.3);
+        }
+
+        .book-title {
+            font-weight: 600;
+            color: var(--pastel-dark);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .book-meta {
+            color: var(--pastel-text);
+            font-size: 0.95em;
+        }
+
+        .no-books {
+            color: var(--pastel-dark);
+            font-style: italic;
+            padding: 10px 0;
+        }
+
         .buttons-container {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-top: 30px;
+            margin-top: 20px;
             width: 100%;
             max-width: 600px;
             flex-wrap: wrap;
@@ -173,8 +224,9 @@
             margin-left: 10px;
         }
 
+        /* Мобильная версия */
         @media (max-width: 600px) {
-            .profile-container {
+            .profile-container, .books-container {
                 margin: 20px 0;
                 border-radius: 12px;
             }
@@ -190,47 +242,13 @@
             .action-button {
                 width: 100%;
             }
+
             .delete-form {
-                display: contents; /* Убирает лишние отступы формы */
+                display: contents;
             }
 
-            .delete-button {
-                background-color: var(--pastel-peach);
-                color: var(--pastel-dark);
-            }
-
-            .delete-button:hover {
-                background-color: #f5c9bb;
-                transform: translateY(-2px);
-                box-shadow: 0 6px 16px rgba(255, 223, 214, 0.5);
-            }
-
-            .buttons-container {
-                display: flex;
-                justify-content: center;
-                gap: 15px;
-                margin-top: 30px;
-                width: 100%;
-                max-width: 600px;
-                flex-wrap: wrap;
-            }
-
-            .action-button {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                padding: 12px 24px;
-                border: none;
-                border-radius: 8px;
-                text-decoration: none;
-                font-size: 16px;
-                font-weight: 500;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                flex: 1;
-                min-width: 200px;
-                box-shadow: 0 4px 12px var(--pastel-shadow);
+            .book-item {
+                padding: 14px;
             }
         }
     </style>
@@ -260,6 +278,22 @@
     </div>
 </div>
 
+<div class="books-container">
+    <h2 class="section-title">Книги пользователя</h2>
+    <div th:if="${not #lists.isEmpty(books)}">
+        <div class="book-item" th:each="book : ${books}">
+            <div class="book-title" th:text="${book.title}"></div>
+            <div class="book-meta">
+                <span th:text="${book.author}"></span> ·
+                <span th:text="${book.year}"></span>
+            </div>
+        </div>
+    </div>
+    <div th:if="${#lists.isEmpty(books)}" class="no-books">
+        У пользователя пока нет книг
+    </div>
+</div>
+
 <div class="buttons-container">
     <a th:href="@{/people/{id}/edit-person(id=${person.person_id})}" class="action-button edit-button">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -275,7 +309,7 @@
         Назад к списку
     </a>
 
-    <form class="delete-form"  th:method="DELETE" th:action="@{/people/{id}(id=${person.person_id})}" th:object="${person}">
+    <form class="delete-form" th:method="DELETE" th:action="@{/people/{id}(id=${person.person_id})}">
         <button type="submit" class="action-button delete-button">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
@@ -284,7 +318,6 @@
             Удалить
         </button>
     </form>
-
 </div>
 </body>
 </html>

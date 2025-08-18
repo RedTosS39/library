@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить новую книгу</title>
+    <style>
+        :root {
+            --pastel-blue: #d4e1ff;
+            --pastel-lavender: #e8d7ff;
+            --pastel-mint: #d7f0e9;
+            --pastel-peach: #ffdfd6;
+            --pastel-text: #5d5d5d;
+            --pastel-dark: #7a7a7a;
+            --pastel-shadow: rgba(0, 0, 0, 0.08);
+            --pastel-error: #ffa8a8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fafafa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--pastel-text);
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px var(--pastel-shadow);
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(212, 225, 255, 0.5);
+        }
+
+        .form-container:hover {
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+        }
+
+        h1 {
+            color: var(--pastel-dark);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 500;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--pastel-dark);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--pastel-blue);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: rgba(212, 225, 255, 0.1);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--pastel-lavender);
+            box-shadow: 0 0 0 3px rgba(232, 215, 255, 0.3);
+        }
+
+        .btn {
+            background: var(--pastel-lavender);
+            color: var(--pastel-dark);
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(232, 215, 255, 0.4);
+        }
+
+        .btn:hover {
+            background: #d9c4f5;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(232, 215, 255, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            color: var(--pastel-error);
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        input.invalid, select.invalid {
+            border-color: var(--pastel-error);
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-align: center;
+            margin-top: 20px;
+            color: var(--pastel-dark);
+            text-decoration: none;
+            font-size: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            background-color: var(--pastel-blue);
+        }
+
+        .back-link:hover {
+            background-color: #c2d3ff;
+            text-decoration: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-container {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @media (max-width: 480px) {
+            .form-container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+                margin-bottom: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <h1>Добавить новую книгу</h1>
+
+    <form th:action="@{/books}" th:object="${book}" th:method="POST">
+        <div class="form-group">
+            <label for="title">Название</label>
+            <input type="text" id="title" th:field="*{title}" required
+                   placeholder="Страна чудес">
+            <div class="error-message" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="author">ФИО Автора</label>
+            <input type="text" id="author" th:field="*{author}" required
+                   placeholder="Михаил Юрьевич Лермонтов">
+            <div class="error-message" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="year">Год выхода</label>
+            <input type="number" id="year" th:field="*{year}" required
+                   min="1800" max="2100" placeholder="1900">
+            <div class="error-message" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
+        </div>
+
+        <div class="form-group" th:if="${books != null}">
+            <label for="owner">Владелец (необязательно)</label>
+            <select id="owner" th:field="*{owner}">
+                <option value="">-- Без владельца --</option>
+                <option th:each="book : ${books}"
+                        th:value="${book.book_id}"
+                        th:text="${book.title}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn">Добавить книгу</button>
+    </form>
+
+    <a href="/books" class="back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+        </svg>
+        Вернуться к списку книг
+    </a>
+</div>
+
+<script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        let valid = true;
+        const inputs = this.querySelectorAll('input[required], select[required]');
+
+        inputs.forEach(input => {
+            const error = input.nextElementSibling;
+
+            if (!input.value.trim()) {
+                input.classList.add('invalid');
+                error.style.display = 'block';
+                valid = false;
+            } else if (input.type === 'number' &&
+                (input.value < input.min || input.value > input.max)) {
+                input.classList.add('invalid');
+                error.style.display = 'block';
+                valid = false;
+            } else {
+                input.classList.remove('invalid');
+                error.style.display = 'none';
+            }
+        });
+
+        if (!valid) {
+            e.preventDefault();
+        }
+    });
+</script>
+</body>
+</html>

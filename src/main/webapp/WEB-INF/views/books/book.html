@@ -194,6 +194,19 @@
         <div class="detail-value">
             <span class="owner-value" th:text="${book.owner?.name}" th:if="${book.owner != null}"></span>
             <span class="no-owner" th:if="${book.owner == null}">Нет владельца</span>
+
+            <form th:action="@{/assign-book}" th:object="${book}" method="post">
+                <!-- Выпадающий список людей -->
+                <select th:field="*{person.id}">
+                    <option value="">-- Выберите владельца --</option>
+                    <option th:each="person : ${people}"
+                            th:value="${person.id}"
+                            th:text="${person.name}">
+                    </option>
+                </select>
+
+                <button type="submit">Назначить</button>
+            </form>
         </div>
     </div>
 </div>
