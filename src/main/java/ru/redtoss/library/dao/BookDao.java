@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import ru.redtoss.library.models.Book;
 import ru.redtoss.library.models.Person;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class BookDao {
@@ -48,7 +48,20 @@ public class BookDao {
     }
 
 
-    public void changeOwner(Person person, int id) {
+    public Optional<Person> getBookOwner(int id) {
+        return jdbcTemplate.query("SELECT p.* FROM person p JOIN book b ON p.person_id = b.person_id WHERE book_id = ?",
+                new BeanPropertyRowMapper<>(Person.class),
+                id
+        ).stream().findAny();
+    }
 
+    //возвращаем книгу с библиотеки
+    public void release(int id) {
+        jdbcTemplate.update("UPDATE book SET person_id = null WHERE book_id = ?", id);
+    }
+
+    //берем книгу из библиотеки
+    public void assign(int id, Person selectedPerson) {
+        jdbcTemplate.update("UPDATE book SET person_id = ? WHERE book_id = ?", selectedPerson.getPerson_id(), id);
     }
 }

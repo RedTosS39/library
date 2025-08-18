@@ -8,22 +8,14 @@ public class Book {
     private String title;
     private String author;
     private int year;
-    private String owner;
 
-    public String getOwner() {
-        return owner;
-    }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public Book(int book_id, String title, String author, int year, String owner) {
+    public Book(int book_id, String title, String author, int year) {
         this.book_id = book_id;
         this.title = title;
         this.author = author;
         this.year = year;
-        this.owner = owner;
+
     }
 
     public int getBook_id() {
