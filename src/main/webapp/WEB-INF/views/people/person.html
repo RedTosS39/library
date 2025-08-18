@@ -250,6 +250,17 @@
             .book-item {
                 padding: 14px;
             }
+
+            .book-link {
+                text-decoration: none;
+                display: block;
+                color: inherit;
+            }
+
+            .book-item:hover {
+                background-color: #c0e5d8;
+                cursor: pointer;
+            }
         }
     </style>
 </head>
@@ -281,13 +292,17 @@
 <div class="books-container">
     <h2 class="section-title">Книги пользователя</h2>
     <div th:if="${not #lists.isEmpty(books)}">
-        <div class="book-item" th:each="book : ${books}">
-            <div class="book-title" th:text="${book.title}"></div>
-            <div class="book-meta">
-                <span th:text="${book.author}"></span> ·
-                <span th:text="${book.year}"></span>
+        <a th:href="@{/books/{id}(id=${book.book_id})}"
+           class="book-link"
+           th:each="book : ${books}">
+            <div class="book-item">
+                <div class="book-title" th:text="${book.title}"></div>
+                <div class="book-meta">
+                    <span th:text="${book.author}"></span> ·
+                    <span th:text="${book.year}"></span>
+                </div>
             </div>
-        </div>
+        </a>
     </div>
     <div th:if="${#lists.isEmpty(books)}" class="no-books">
         У пользователя пока нет книг
@@ -304,7 +319,8 @@
 
     <a href="/people" class="action-button back-button">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+            <path fill-rule="evenodd"
+                  d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
         </svg>
         Назад к списку
     </a>
@@ -313,7 +329,8 @@
         <button type="submit" class="action-button delete-button">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                <path fill-rule="evenodd"
+                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
             </svg>
             Удалить
         </button>
