@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль пользователя</title>
+    <style>
+        :root {
+            --pastel-blue: #d4e1ff;
+            --pastel-lavender: #e8d7ff;
+            --pastel-mint: #d7f0e9;
+            --pastel-peach: #ffdfd6;
+            --pastel-text: #5d5d5d;
+            --pastel-dark: #7a7a7a;
+            --pastel-shadow: rgba(0, 0, 0, 0.08);
+            --pastel-error: #ffa8a8;
+            --pastel-success: #a8e6cf;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 20px;
+            color: var(--pastel-text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .profile-container {
+            max-width: 600px;
+            width: 100%;
+            margin: 30px 0;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px var(--pastel-shadow);
+            overflow: hidden;
+            border: 1px solid rgba(212, 225, 255, 0.5);
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, var(--pastel-lavender), var(--pastel-blue));
+            color: var(--pastel-dark);
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: 500;
+            color: var(--pastel-dark);
+            border: 3px solid white;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            margin: 10px 0 5px;
+            font-weight: 500;
+        }
+
+        .profile-id {
+            font-size: 14px;
+            opacity: 0.8;
+            background-color: rgba(255, 255, 255, 0.3);
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 50px;
+        }
+
+        .profile-details {
+            padding: 30px;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(212, 225, 255, 0.5);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            width: 120px;
+            color: var(--pastel-dark);
+            font-size: 15px;
+        }
+
+        .detail-value {
+            flex: 1;
+            font-size: 16px;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            width: 100%;
+            max-width: 600px;
+            flex-wrap: wrap;
+        }
+
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 200px;
+            box-shadow: 0 4px 12px var(--pastel-shadow);
+        }
+
+        .edit-button {
+            background-color: var(--pastel-mint);
+            color: var(--pastel-dark);
+        }
+
+        .edit-button:hover {
+            background-color: #c0e5d8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(215, 240, 233, 0.4);
+        }
+
+        .back-button {
+            background-color: var(--pastel-peach);
+            color: var(--pastel-dark);
+        }
+
+        .back-button:hover {
+            background-color: #f5c9bb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 223, 214, 0.4);
+        }
+
+        .action-button svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .minor {
+            color: var(--pastel-error);
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .adult {
+            color: var(--pastel-success);
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .profile-container {
+                margin: 20px 0;
+                border-radius: 12px;
+            }
+
+            .profile-header {
+                padding: 30px 20px;
+            }
+
+            .buttons-container {
+                flex-direction: column;
+            }
+
+            .action-button {
+                width: 100%;
+            }
+            .delete-form {
+                display: contents; /* Убирает лишние отступы формы */
+            }
+
+            .delete-button {
+                background-color: var(--pastel-peach);
+                color: var(--pastel-dark);
+            }
+
+            .delete-button:hover {
+                background-color: #f5c9bb;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(255, 223, 214, 0.5);
+            }
+
+            .buttons-container {
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+                margin-top: 30px;
+                width: 100%;
+                max-width: 600px;
+                flex-wrap: wrap;
+            }
+
+            .action-button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                padding: 12px 24px;
+                border: none;
+                border-radius: 8px;
+                text-decoration: none;
+                font-size: 16px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                flex: 1;
+                min-width: 200px;
+                box-shadow: 0 4px 12px var(--pastel-shadow);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="profile-container" th:object="${person}">
+    <div class="profile-header">
+        <div class="profile-avatar" th:text="${#strings.substring(person.name, 0, 1)}"></div>
+        <h1 class="profile-name" th:text="*{name}"></h1>
+        <div class="profile-id">ID: <span th:text="*{person_id}"></span></div>
+    </div>
+
+    <div class="profile-details">
+        <div class="detail-row">
+            <div class="detail-label">Полное имя</div>
+            <div class="detail-value" th:text="*{name}"></div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">Возраст</div>
+            <div class="detail-value">
+                <span th:text="*{age}"></span> лет
+                <span class="minor" th:if="*{age < 18}">(Несовершеннолетний)</span>
+                <span class="adult" th:if="*{age >= 18}">(Совершеннолетний)</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="buttons-container">
+    <a th:href="@{/people/{id}/edit-person(id=${person.person_id})}" class="action-button edit-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+        </svg>
+        Редактировать
+    </a>
+
+    <a href="/people" class="action-button back-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+        </svg>
+        Назад к списку
+    </a>
+
+    <form class="delete-form"  th:method="DELETE" th:action="@{/people/{id}(id=${person.person_id})}" th:object="${person}">
+        <button type="submit" class="action-button delete-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+            </svg>
+            Удалить
+        </button>
+    </form>
+
+</div>
+</body>
+</html>

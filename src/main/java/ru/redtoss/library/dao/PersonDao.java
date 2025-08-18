@@ -23,4 +23,24 @@ public class PersonDao {
         String SQL = "SELECT * FROM person";
         return jdbcTemplate.query(SQL, new BeanPropertyRowMapper<>(Person.class));
     }
+
+    public Person getPerson(int id) {
+        return jdbcTemplate.query("SELECT * FROM person WHERE person_id=?",
+                new Object[]{id},
+                new BeanPropertyRowMapper<>(Person.class)).stream().findAny().orElse(null);
+    }
+
+    public Person createPerson(Person person) {
+
+        jdbcTemplate.update("INSERT INTO person (name, age) VALUES (?, ?)", person.getName(), person.getAge());
+        return person;
+    }
+
+    public void updatePerson(Person person, int id) {
+        jdbcTemplate.update("UPDATE  person SET name=?, age=? WHERE person_id=?", person.getName(), person.getAge(), id);
+    }
+
+    public void deletePerson(int id) {
+        jdbcTemplate.update("DELETE FROM person WHERE person_id=?", id);
+    }
 }

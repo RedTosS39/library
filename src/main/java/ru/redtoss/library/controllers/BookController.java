@@ -1,7 +1,76 @@
 package ru.redtoss.library.controllers;
 
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import ru.redtoss.library.dao.BookDao;
+import ru.redtoss.library.models.Book;
 
 @Controller
+@RequestMapping(value = "/books", produces = "text/html;charset=UTF-8")
 public class BookController {
+
+    private final BookDao bookDao;
+
+    @Autowired
+    public BookController(BookDao bookDao) {
+        this.bookDao = bookDao;
+    }
+
+    @GetMapping
+    public String getBooks(Model model) {
+        model.addAttribute("books", bookDao.getBooks());
+        System.out.println(model.getAttribute("books").toString());
+
+        return "books/index";
+    }
+
+    @GetMapping("{id}")
+    public String getBook(@PathVariable("id") int id, Model model) {
+        model.addAttribute("book", bookDao.getBook(id));
+        return "books/book";
+    }
+
+
+    @GetMapping("/{id}/edit-book")
+    public String editBook(@PathVariable("id") int id, Model model) {
+        model.addAttribute("book", bookDao.getBook(id));
+        return "books/edit-book";
+    }
+
+    @PatchMapping("/{id}")
+    public String updateBook(@ModelAttribute("book") @Valid Book book,
+                             @PathVariable("id") int id,
+                             BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "books/edit-book";
+        }
+        book.setBook_id(id);
+        bookDao.editBook(book);
+        return "redirect:/books";
+    }
+
+
+    //show form
+    @GetMapping("/add-book")
+    public String addBook(@ModelAttribute("book") Book book) {
+        return "books/add-book";
+    }
+
+    @PostMapping()
+    public String addBook(@Valid Book book, Model model, BindingResult bindingResult) {
+
+        model.addAttribute("book", book);
+        if (bindingResult.hasErrors()) {
+            return "books/add-book";
+        }
+
+        bookDao.addBook();
+        return "redirect:/books";
+    }
+
+
 }
