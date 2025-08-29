@@ -22,7 +22,6 @@ public class PersonController {
     @GetMapping(produces = "text/html;charset=UTF-8")
     public String getPeople(Model model) {
         model.addAttribute("people", personDao.getPersonList());
-
         return "people/index";
     }
 

@@ -1,16 +1,28 @@
 package ru.redtoss.library.models;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 
 import java.util.List;
 
+@Entity
+@Table(name = "Person")
 public class Person {
 
+    @Id
+    @Column(name = "person_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int person_id;
 
     @NotEmpty(message = "Поле Имя должно быть заполненно")
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "age")
     private int age;
+
+    @OneToMany(mappedBy = "owner", cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private List<Book> books;
 
     public List<Book> getBooks() {
@@ -21,8 +33,7 @@ public class Person {
         this.books = books;
     }
 
-    public Person(int person_id, String name, int age, List<Book> books) {
-        this.person_id = person_id;
+    public Person(String name, int age, List<Book> books) {
         this.name = name;
         this.age = age;
         this.books = books;
@@ -49,10 +60,6 @@ public class Person {
         return person_id;
     }
 
-    public void setPerson_id(int person_id) {
-        this.person_id = person_id;
-    }
-
     public void setAge(int age) {
         this.age = age;
     }
@@ -60,9 +67,9 @@ public class Person {
     @Override
     public String toString() {
         return "Person{" +
-               "id=" + person_id +
-               ", name='" + name + '\'' +
-               ", age=" + age +
+               "id=" + getPerson_id() +
+               ", name='" + getName() + '\'' +
+               ", age=" + getAge() +
                '}';
     }
 }
