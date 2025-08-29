@@ -187,15 +187,6 @@
             <div class="error-message" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
         </div>
 
-        <div class="form-group" th:if="${books != null}">
-            <label for="owner">Владелец (необязательно)</label>
-            <select id="owner" th:field="*{owner}">
-                <option value="">-- Без владельца --</option>
-                <option th:each="book : ${books}"
-                        th:value="${book.book_id}"
-                        th:text="${book.title}"></option>
-            </select>
-        </div>
 
         <button type="submit" class="btn">Добавить книгу</button>
     </form>

@@ -111,7 +111,7 @@ private final JdbcTemplate jdbcTemplate;
     }
 
     public List<Book> getBooksByPersonId(int id) {
-        return jdbcTemplate.query("SELECT * FROM person p JOIN book b ON(p.person_id = b.person_id) WHERE p.person_id=?",
+        return jdbcTemplate.query("SELECT * FROM book WHERE person_id=?",
                 new Object[]{id},
                 new BeanPropertyRowMapper<>(Book.class));
     }*/
