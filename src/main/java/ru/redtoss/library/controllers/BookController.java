@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.redtoss.library.models.Book;
 import ru.redtoss.library.models.Person;
 import ru.redtoss.library.services.BooksService;
+import ru.redtoss.library.services.OwnerSetterService;
 import ru.redtoss.library.services.PeopleService;
 
 import java.util.Optional;
@@ -18,11 +19,13 @@ import java.util.Optional;
 public class BookController {
 
     private final BooksService booksService;
+    private final OwnerSetterService ownerSetterService;
     private final PeopleService peopleService;
 
     @Autowired
-    public BookController(BooksService booksService, PeopleService peopleService) {
+    public BookController(BooksService booksService, OwnerSetterService ownerSetterService, PeopleService peopleService) {
         this.booksService = booksService;
+        this.ownerSetterService = ownerSetterService;
         this.peopleService = peopleService;
     }
 
@@ -35,14 +38,25 @@ public class BookController {
 
     @GetMapping("{id}")
     public String getBook(@PathVariable("id") int id,
-                          @ModelAttribute("person") Person person,
                           Model model) {
 
-        model.addAttribute("book", booksService.getBookById(id));
-        Optional<Person> bookOwner = booksService.getBookOwner(id);
+        Optional<Book> bookOptional = booksService.getBookById(id);
 
-        if (bookOwner.isPresent()) {
-            model.addAttribute("owner", bookOwner);
+        if (bookOptional.isPresent()) {
+            Book book = bookOptional.get();
+            model.addAttribute("book", book);
+            System.out.println("Found book: " + book.getTitle() + book.getOwner() + book.getYear()); // Правильный вывод
+
+        } else {
+            System.out.println("Book not found");
+            model.addAttribute("book", null); // Явно устанавливаем null
+        }
+
+        Optional<Person> owner = booksService.getBookOwner(id);
+        if (owner.isPresent()) {
+            Person own = owner.get();
+            model.addAttribute("owner", own);
+            System.out.println(owner.get().getName());
         } else {
             model.addAttribute("owner", null);
             model.addAttribute("people", peopleService.findAll());
@@ -104,18 +118,18 @@ public class BookController {
         return "redirect:/books";
     }
 
-    //назначаем книгу
+    // назначаем книгу
     @PatchMapping("/{id}/assign")
     public String assignBook(@PathVariable("id") int id,
                              @RequestParam("person") int person_id) {
-        booksService.assignBook(id, person_id);
+        ownerSetterService.setOwner(id, person_id);
         return "redirect:/books/" + id;
     }
 
     //Освобождаем книгу
     @PatchMapping("/{id}/release")
     public String releaseBook(@PathVariable("id") int id) {
-        booksService.removeOwner(id);
+        ownerSetterService.removeOwner(id);
         return "redirect:/books/" + id;
     }
 }

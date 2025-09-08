@@ -1,14 +1,15 @@
 package ru.redtoss.library.services;
 
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.redtoss.library.dao.PersonDao;
 import ru.redtoss.library.models.Book;
 import ru.redtoss.library.models.Person;
 import ru.redtoss.library.repositories.PeopleRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,12 +19,9 @@ public class PeopleService {
 
     private final PeopleRepository peopleRepository;
 
-    private final PersonDao personDao;
-
     @Autowired
-    public PeopleService(PeopleRepository peopleRepository, PersonDao personDao) {
+    public PeopleService(PeopleRepository peopleRepository) {
         this.peopleRepository = peopleRepository;
-        this.personDao = personDao;
     }
 
     public List<Person> findAll() {
@@ -53,11 +51,14 @@ public class PeopleService {
     }
 
     public List<Book> getBooksByPersonId(int id) {
-        return personDao.getBooksByPersonId(id);
+        Optional<Person> person = peopleRepository.findById(id);
+        if (person.isPresent()) {
+            Hibernate.initialize(person.get().getBooks());
+            return person.get().getBooks();
+        } else {
+            return Collections.emptyList();
+        }
     }
 
-    @Transactional
-    public void setBooks(int book_id, int person_id) {
-        personDao.setBooks(book_id, person_id);
-    }
+
 }

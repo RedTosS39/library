@@ -1,9 +1,9 @@
 package ru.redtoss.library.services;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.redtoss.library.dao.BookDao;
 import ru.redtoss.library.models.Book;
 import ru.redtoss.library.models.Person;
 import ru.redtoss.library.repositories.BooksRepository;
@@ -16,12 +16,11 @@ import java.util.Optional;
 public class BooksService {
 
     private final BooksRepository booksRepository;
-    private final BookDao bookDao;
 
     @Autowired
-    public BooksService(BooksRepository booksRepository, BookDao bookDao) {
+    public BooksService(BooksRepository booksRepository) {
         this.booksRepository = booksRepository;
-        this.bookDao = bookDao;
+
     }
 
 
@@ -41,7 +40,9 @@ public class BooksService {
 
     @Transactional
     public void updateBook(int id, Book updatedBook) {
+        Book bookToBeUpdated = booksRepository.findById(id).get();
         updatedBook.setBook_id(id);
+        bookToBeUpdated.setOwner(updatedBook.getOwner());
         booksRepository.save(updatedBook);
     }
 
@@ -50,19 +51,14 @@ public class BooksService {
         booksRepository.deleteById(id);
     }
 
-    @Transactional
-    public void removeOwner(int id) {
-        bookDao.removeOwner(id);
-    }
-
-    @Transactional
-    public void assignBook(int book_id, int person_id) {
-        bookDao.assignBook(book_id, person_id);
-    }
 
     public Optional<Person> getBookOwner(int id) {
-        return bookDao.getBookOwner(id);
+        Optional<Person> owner = booksRepository.findOwnerByBookId(id);
+        if (owner.isPresent()) {
+            Hibernate.initialize(owner.get());
+            return owner;
+        } else {
+            return Optional.empty();
+        }
     }
-
-
 }

@@ -29,7 +29,7 @@ public class PersonController {
     @GetMapping(value = "/{person_id}")
     public String getPerson(@PathVariable("person_id") int id, Model model) {
         model.addAttribute("person", peopleService.findById(id));
-//        model.addAttribute("books", peopleService.getBooksByPersonId(id));
+        model.addAttribute("books", peopleService.getBooksByPersonId(id));
         return "people/person";
     }
 

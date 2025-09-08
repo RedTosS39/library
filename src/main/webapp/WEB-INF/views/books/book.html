@@ -299,22 +299,23 @@
         <div class="book-info">
             <div class="info-row">
                 <span class="info-label">ID книги:</span>
-                <span class="info-value" th:text="${book.book_id}"></span>
+                <!--/*@thymesVar id="getBook" type=""*/-->
+                <span class="info-value" th:text="${book.getBook_id()}"></span>
             </div>
 
             <div class="info-row">
                 <span class="info-label">Название:</span>
-                <span class="info-value" th:text="${book.title}"></span>
+                <span class="info-value" th:text="${book.getTitle()}"></span>
             </div>
 
             <div class="info-row">
                 <span class="info-label">Автор:</span>
-                <span class="info-value" th:text="${book.author}"></span>
+                <span class="info-value" th:text="${book.getAuthor()}"></span>
             </div>
 
             <div class="info-row">
                 <span class="info-label">Год издания:</span>
-                <span class="info-value" th:text="${book.year} ?: 'Не указан'"></span>
+                <span class="info-value" th:text="${book.getYear()} ?: 'Не указан'"></span>
             </div>
         </div>
 
