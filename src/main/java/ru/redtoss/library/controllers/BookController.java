@@ -6,10 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.redtoss.library.dao.BookDao;
-import ru.redtoss.library.dao.PersonDao;
 import ru.redtoss.library.models.Book;
 import ru.redtoss.library.models.Person;
+import ru.redtoss.library.services.BooksService;
+import ru.redtoss.library.services.PeopleService;
 
 import java.util.Optional;
 
@@ -17,35 +17,35 @@ import java.util.Optional;
 @RequestMapping(value = "/books", produces = "text/html;charset=UTF-8")
 public class BookController {
 
-    private final BookDao bookDao;
-
-    private final PersonDao personDao;
-
+    private final BooksService booksService;
+    private final PeopleService peopleService;
 
     @Autowired
-    public BookController(BookDao bookDao, PersonDao personDao) {
-        this.bookDao = bookDao;
-        this.personDao = personDao;
+    public BookController(BooksService booksService, PeopleService peopleService) {
+        this.booksService = booksService;
+        this.peopleService = peopleService;
     }
+
 
     @GetMapping
     public String getBooks(Model model) {
-        model.addAttribute("books", bookDao.getBooks());
+        model.addAttribute("books", booksService.getBooks());
         return "books/index";
     }
 
     @GetMapping("{id}")
-    public String getBook(@PathVariable("id") int id, Model model,
-                          @ModelAttribute("person") Person person) {
-        model.addAttribute("book", bookDao.getBook(id));
+    public String getBook(@PathVariable("id") int id,
+                          @ModelAttribute("person") Person person,
+                          Model model) {
 
-        Optional<Person> bookOwner = bookDao.getBookOwner(id);
+        model.addAttribute("book", booksService.getBookById(id));
+        Optional<Person> bookOwner = booksService.getBookOwner(id);
 
         if (bookOwner.isPresent()) {
-            model.addAttribute("owner", bookOwner.get());
+            model.addAttribute("owner", bookOwner);
         } else {
             model.addAttribute("owner", null);
-            model.addAttribute("people", personDao.getPersonList());
+            model.addAttribute("people", peopleService.findAll());
         }
 
         return "books/book";
@@ -53,8 +53,10 @@ public class BookController {
 
 
     @GetMapping("/{id}/edit-book")
-    public String editBook(@PathVariable("id") int id, Model model) {
-        model.addAttribute("book", bookDao.getBook(id));
+    public String editBook(@PathVariable("id") int id,
+                           Model model) {
+        model.addAttribute("book", booksService.getBookById(id));
+
         return "books/edit-book";
     }
 
@@ -65,7 +67,7 @@ public class BookController {
         if (bindingResult.hasErrors()) {
             return "books/edit-book";
         }
-        bookDao.editBook(book, id);
+        booksService.updateBook(id, book);
         return "redirect:/books";
     }
 
@@ -92,14 +94,13 @@ public class BookController {
         if (bindingResult.hasErrors()) {
             return "books/add-book";
         }
-
-        bookDao.addBook(book);
+        booksService.saveBook(book);
         return "redirect:/books";
     }
 
     @DeleteMapping("/{id}")
     public String deleteBook(@PathVariable(value = "id") int id) {
-        bookDao.deleteBook(id);
+        booksService.deleteBook(id);
         return "redirect:/books";
     }
 
@@ -107,14 +108,14 @@ public class BookController {
     @PatchMapping("/{id}/assign")
     public String assignBook(@PathVariable("id") int id,
                              @RequestParam("person") int person_id) {
-        bookDao.assignBook(id, person_id);
+        booksService.assignBook(id, person_id);
         return "redirect:/books/" + id;
     }
 
     //Освобождаем книгу
     @PatchMapping("/{id}/release")
     public String releaseBook(@PathVariable("id") int id) {
-        bookDao.removeOwner(id);
+        booksService.removeOwner(id);
         return "redirect:/books/" + id;
     }
 }

@@ -17,242 +17,379 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #fafafa;
+            background-color: #ffffff;
             margin: 0;
             padding: 20px;
             color: var(--pastel-text);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             min-height: 100vh;
         }
 
-        .book-container {
-            max-width: 600px;
-            width: 100%;
-            margin: 30px 0;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px var(--pastel-shadow);
-            overflow: hidden;
-            border: 1px solid rgba(212, 225, 255, 0.5);
-            padding: 30px;
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        h1 {
-            color: var(--pastel-dark);
+        .header {
             text-align: center;
             margin-bottom: 30px;
-            font-weight: 500;
+            padding: 20px 0;
         }
 
-        .book-detail {
+        .header h1 {
+            color: var(--pastel-dark);
+            font-weight: 500;
+            font-size: 2.2em;
+            margin: 0;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 5px 20px var(--pastel-shadow);
+            margin-bottom: 25px;
+            border: 1px solid rgba(212, 225, 255, 0.3);
+        }
+
+        .book-info {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .info-row {
             display: flex;
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(212, 225, 255, 0.5);
+            align-items: center;
+            padding: 12px 18px;
+            border-radius: 10px;
+            background: rgba(212, 225, 255, 0.1);
+            transition: all 0.2s ease;
         }
 
-        .book-detail:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
+        .info-row:hover {
+            background: rgba(212, 225, 255, 0.15);
         }
 
-        .detail-label {
+        .info-label {
             font-weight: 500;
-            width: 150px;
+            color: var(--pastel-dark);
+            min-width: 130px;
+            font-size: 15px;
+        }
+
+        .info-value {
+            flex: 1;
+            font-size: 16px;
+        }
+
+        .owner-section {
+            background: rgba(232, 215, 255, 0.08);
+            padding: 25px;
+            border-radius: 14px;
+            margin: 25px 0;
+            border: 1px solid rgba(232, 215, 255, 0.2);
+        }
+
+        .owner-section h3 {
+            color: var(--pastel-dark);
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            font-weight: 500;
+        }
+
+        .current-owner {
+            background: rgba(215, 240, 233, 0.1);
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(215, 240, 233, 0.2);
+        }
+
+        .owner-details {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .owner-details p {
+            margin: 5px 0;
+        }
+
+        .assign-form {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 22px;
+            border-radius: 12px;
+            border: 1px solid rgba(212, 225, 255, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
             color: var(--pastel-dark);
             font-size: 15px;
         }
 
-        .detail-value {
-            flex: 1;
-            font-size: 16px;
+        .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--pastel-lavender);
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+            color: var(--pastel-text);
+            transition: all 0.2s ease;
         }
 
-        .owner-value {
-            font-style: italic;
+        .form-select:focus {
+            outline: none;
+            border-color: var(--pastel-mint);
+            box-shadow: 0 0 0 3px rgba(215, 240, 233, 0.2);
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--pastel-mint);
             color: var(--pastel-dark);
+        }
+
+        .btn-primary:hover {
+            background: #c2e4da;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: var(--pastel-peach);
+            color: var(--pastel-dark);
+        }
+
+        .btn-danger:hover {
+            background: #f5c9bb;
+            transform: translateY(-1px);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .action-btn {
+            padding: 13px;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 14px;
+        }
+
+        .btn-edit {
+            background: var(--pastel-mint);
+            color: var(--pastel-dark);
+        }
+
+        .btn-delete {
+            background: var(--pastel-peach);
+            color: var(--pastel-dark);
+        }
+
+        .btn-back {
+            background: var(--pastel-blue);
+            color: var(--pastel-dark);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         }
 
         .no-owner {
-            color: var(--pastel-peach);
+            color: var(--pastel-text);
             font-style: italic;
+            padding: 18px;
+            text-align: center;
+            background: rgba(255, 223, 214, 0.1);
+            border-radius: 10px;
+            border: 1px dashed var(--pastel-peach);
+            margin-bottom: 18px;
         }
 
-        .buttons-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
-            width: 100%;
-            max-width: 600px;
-        }
-
-        .action-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            flex: 1;
-            min-width: 200px;
-            box-shadow: 0 4px 12px var(--pastel-shadow);
-        }
-
-        .back-button {
-            background-color: var(--pastel-blue);
-            color: var(--pastel-dark);
-        }
-
-        .back-button:hover {
-            background-color: #c2d3ff;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(212, 225, 255, 0.4);
-        }
-
-        .edit-button {
-            background-color: var(--pastel-mint);
-            color: var(--pastel-dark);
-        }
-
-        .edit-button:hover {
-            background-color: #c0e5d8;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(215, 240, 233, 0.4);
-        }
-
-        .delete-button {
-            background-color: var(--pastel-peach);
-            color: var(--pastel-dark);
-        }
-
-        .delete-button:hover {
-            background-color: #f5c9bb;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(255, 223, 214, 0.4);
-        }
-
-        .not-found {
+        .book-meta {
             text-align: center;
             color: var(--pastel-dark);
-            padding: 40px;
-            background-color: white;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px var(--pastel-shadow);
+            font-size: 14px;
+            margin-top: 10px;
+            opacity: 0.8;
         }
 
-        @media (max-width: 600px) {
-            .book-container {
-                padding: 20px;
+        @media (max-width: 768px) {
+            .book-card {
+                padding: 25px;
             }
 
-            .buttons-container {
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .info-row {
                 flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
             }
 
-            .action-button {
-                width: 100%;
+            .info-label {
+                min-width: auto;
+                font-weight: 600;
             }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+
+        /* Минимальные анимации */
+        .book-card {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Убираем все эмодзи и иконки */
+        .btn::before,
+        .action-btn::before {
+            content: none;
         }
     </style>
 </head>
 <body>
-<div th:if="${book != null}" class="book-container">
-    <h1>Информация о книге</h1>
-
-    <div class="book-detail">
-        <div class="detail-label">ID:</div>
-        <div class="detail-value" th:text="${book.book_id}"></div>
+<div class="container">
+    <div class="header">
+        <h1>Детали книги</h1>
     </div>
 
-    <div class="book-detail">
-        <div class="detail-label">Название:</div>
-        <div class="detail-value" th:text="${book.title}"></div>
-    </div>
+    <div th:if="${book != null}" class="book-card">
+        <div class="book-info">
+            <div class="info-row">
+                <span class="info-label">ID книги:</span>
+                <span class="info-value" th:text="${book.book_id}"></span>
+            </div>
 
-    <div class="book-detail">
-        <div class="detail-label">Автор:</div>
-        <div class="detail-value" th:text="${book.author}"></div>
-    </div>
+            <div class="info-row">
+                <span class="info-label">Название:</span>
+                <span class="info-value" th:text="${book.title}"></span>
+            </div>
 
-    <div class="book-detail">
-        <div class="detail-label">Год издания:</div>
-        <div class="detail-value" th:text="${book.year}"></div>
-    </div>
+            <div class="info-row">
+                <span class="info-label">Автор:</span>
+                <span class="info-value" th:text="${book.author}"></span>
+            </div>
 
-    <div class="book-detail">
-        <div class="detail-label">Владелец:</div>
-        <div class="detail-value">
-            <span class="owner-value" th:text="${book.owner?.name}" th:if="${book.owner != null}"></span>
-            <span class="no-owner" th:if="${book.owner == null}">Нет владельца</span>
+            <div class="info-row">
+                <span class="info-label">Год издания:</span>
+                <span class="info-value" th:text="${book.year} ?: 'Не указан'"></span>
+            </div>
+        </div>
 
-            <form th:action="@{/assign-book}" th:object="${book}" method="post">
-                <!-- Выпадающий список людей -->
-                <select th:field="*{person.id}">
-                    <option value="">-- Выберите владельца --</option>
-                    <option th:each="person : ${people}"
-                            th:value="${person.id}"
-                            th:text="${person.name}">
-                    </option>
-                </select>
+        <div class="owner-section">
+            <h3>Информация о владельце</h3>
 
-                <button type="submit">Назначить</button>
+            <div th:if="${owner != null}" class="current-owner">
+                <div class="owner-details">
+                    <p><strong>Текущий владелец:</strong>
+                        <span th:text="${owner.name} + ' (ID: ' + ${owner.person_id} + ')'"></span>
+                    </p>
+                    <p><strong>Возраст:</strong> <span th:text="${owner.age} + ' лет'"></span></p>
+                </div>
+
+                <form th:action="@{/books/{id}/release(id=${book.book_id})}" method="post">
+                    <input type="hidden" name="_method" value="patch" />
+                    <button type="submit" class="btn btn-danger">
+                        Освободить книгу
+                    </button>
+                </form>
+            </div>
+
+            <div th:if="${owner == null}" class="no-owner">
+                <p>Книга свободна - нет текущего владельца</p>
+            </div>
+
+            <div th:if="${owner == null and people != null}" class="assign-form">
+                <form th:action="@{/books/{id}/assign(id=${book.book_id})}" method="post">
+                    <input type="hidden" name="_method" value="patch" />
+
+                    <div class="form-group">
+                        <label for="ownerSelect">Назначить нового владельца:</label>
+                        <select id="ownerSelect" name="person" class="form-select" required>
+                            <option value="">-- Выберите пользователя --</option>
+                            <option th:each="p : ${people}"
+                                    th:value="${p.person_id}"
+                                    th:text="${p.name} + ' (ID: ' + ${p.person_id} + ', возраст: ' + ${p.age} + ')'">
+                            </option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        Назначить владельца
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a th:href="@{/books/{id}/edit-book(id=${book.book_id})}" class="action-btn btn-edit">
+                Редактировать
+            </a>
+
+            <form th:action="@{/books/{id}(id=${book.book_id})}" method="post"
+                  onsubmit="return confirm('Вы уверены, что хотите удалить эту книгу?')">
+                <input type="hidden" name="_method" value="DELETE"/>
+                <button type="submit" class="action-btn btn-delete">
+                    Удалить
+                </button>
             </form>
+
+            <a th:href="@{/books}" class="action-btn btn-back">
+                Назад к каталогу
+            </a>
+        </div>
+    </div>
+
+    <div th:if="${book == null}" class="book-card">
+        <div style="text-align: center; padding: 40px;">
+            <h2 style="color: var(--pastel-dark); margin-bottom: 15px;">Книга не найдена</h2>
+            <p style="color: var(--pastel-text); margin-bottom: 25px;">Запрошенная книга не существует или была удалена</p>
+            <a th:href="@{/books}" class="action-btn btn-back">
+                Вернуться к каталогу
+            </a>
         </div>
     </div>
 </div>
-
-<div th:if="${book == null}" class="not-found">
-    <h1>Книга не найдена</h1>
-    <p>Запрошенная книга не существует или была удалена</p>
-</div>
-
-<div class="buttons-container" th:if="${book != null}">
-    <a th:href="@{/books/{id}/edit-book(id=${book.book_id})}" class="action-button edit-button">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-        </svg>
-        Редактировать
-    </a>
-
-    <form th:method="DELETE" th:action="@{/books/{id}(id=${book.book_id})}" class="delete-form">
-        <button type="submit" class="action-button delete-button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                <path fill-rule="evenodd"
-                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-            </svg>
-            Удалить
-        </button>
-    </form>
-
-    <a href="/books" class="action-button back-button">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-            <path fill-rule="evenodd"
-                  d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-        </svg>
-        Назад
-    </a>
-</div>
-
-<script>
-    // Подтверждение удаления
-    document.querySelectorAll('.delete-form').forEach(form => {
-        form.addEventListener('submit', function (e) {
-            if (!confirm('Вы уверены, что хотите удалить эту книгу?')) {
-                e.preventDefault();
-            }
-        });
-    });
-</script>
 </body>
 </html>

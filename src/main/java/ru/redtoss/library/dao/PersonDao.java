@@ -24,41 +24,6 @@ public class PersonDao {
     }
 
     @Transactional(readOnly = true)
-    public List<Person> getPersonList() {
-        Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("select p from Person p", Person.class).getResultList();
-    }
-
-
-    @Transactional(readOnly = true)
-    public Person getPerson(int id) {
-        Session session = sessionFactory.getCurrentSession();
-        return session.find(Person.class, id);
-    }
-
-    @Transactional
-    public Person createPerson(Person person) {
-        Session session = sessionFactory.getCurrentSession();
-        session.persist(person);
-        return person;
-    }
-
-    @Transactional
-    public void updatePerson(Person person, int id) {
-        Session session = sessionFactory.getCurrentSession();
-        Person person1 = session.find(Person.class, id);
-        person1.setAge(person.getAge());
-        person1.setName(person.getName());
-    }
-
-    @Transactional
-    public void deletePerson(int id) {
-        Session session = sessionFactory.getCurrentSession();
-        Person person = session.find(Person.class, id);
-        session.remove(person);
-    }
-
-    @Transactional(readOnly = true)
     public List<Book> getBooksByPersonId(int id) {
         Session session = sessionFactory.getCurrentSession();
         Person person = session.find(Person.class, id);
