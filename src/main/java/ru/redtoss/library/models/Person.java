@@ -2,7 +2,6 @@ package ru.redtoss.library.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import org.hibernate.validator.internal.util.stereotypes.Lazy;
 
 import java.util.List;
 
@@ -21,6 +20,11 @@ public class Person {
 
     @Column(name = "age")
     private int age;
+
+
+    public void setPerson_id(int person_id) {
+        this.person_id = person_id;
+    }
 
     @OneToMany(mappedBy = "owner", cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private List<Book> books;

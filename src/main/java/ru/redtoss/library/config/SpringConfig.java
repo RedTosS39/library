@@ -7,9 +7,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.jpa.hibernate.HibernateTransactionManager;
-import org.springframework.orm.jpa.hibernate.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -26,9 +28,9 @@ import java.util.Properties;
 @Configuration
 @ComponentScan("ru.redtoss.library")
 @EnableWebMvc
-//@PropertySource("classpath:app.properties")
 @PropertySource("classpath:hibernate.properties")
 @EnableTransactionManagement
+@EnableJpaRepositories("ru.redtoss.library.repositories")
 public class SpringConfig implements WebMvcConfigurer {
 
 
@@ -68,7 +70,6 @@ public class SpringConfig implements WebMvcConfigurer {
     }
 
 
-
     //Указываем ресурсы, откуда будем брать данные
     //Hibernate DataSource
     @Bean
@@ -92,23 +93,43 @@ public class SpringConfig implements WebMvcConfigurer {
     }
 
 
-
     @Bean
-    public LocalSessionFactoryBean sessionFactoryBean() {
-        LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
-        sessionFactoryBean.setDataSource(dataSource());
-        sessionFactoryBean.setPackagesToScan("ru.redtoss.library.models");
-        sessionFactoryBean.setHibernateProperties(hibernateProperties());
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource());
+        em.setPackagesToScan("ru.redtoss.library.models");
 
-        return sessionFactoryBean;
+        final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
+        em.setJpaProperties(hibernateProperties());
+
+        return em;
     }
 
     @Bean
     public PlatformTransactionManager transactionManager() {
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(sessionFactoryBean().getObject());
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return transactionManager;
     }
+
+
+//    @Bean
+//    public LocalSessionFactoryBean sessionFactoryBean() {
+//        LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
+//        sessionFactoryBean.setDataSource(dataSource());
+//        sessionFactoryBean.setPackagesToScan("ru.redtoss.library.models");
+//        sessionFactoryBean.setHibernateProperties(hibernateProperties());
+//
+//        return sessionFactoryBean;
+//    }
+
+//    @Bean
+//    public PlatformTransactionManager transactionManager() {
+//        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+//
+//        return transactionManager;
+//    }
 
 
     ///JDBC DataSource
