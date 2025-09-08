@@ -14,7 +14,7 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int person_id;
 
-    @NotEmpty(message = "Поле Имя должно быть заполненно")
+    @NotEmpty(message = "Поле Имя должно быть заполнено")
     @Column(name = "name")
     private String name;
 
