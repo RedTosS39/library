@@ -46,6 +46,4 @@ public class OwnerSetterService {
             book.get().setOwner(null);
         }
     }
-
-
 }

@@ -2,7 +2,10 @@ package ru.redtoss.library.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -20,6 +23,14 @@ public class Person {
 
     @Column(name = "age")
     private int age;
+
+    @Column(name = "date_of_birth")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dateOfBirth;
+
+    @Column(name = "created_at")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDateTime createdAt;
 
 
     public void setPerson_id(int person_id) {
@@ -41,6 +52,23 @@ public class Person {
         this.name = name;
         this.age = age;
         this.books = books;
+    }
+
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
 

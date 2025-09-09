@@ -11,7 +11,4 @@ import java.util.List;
 @Repository
 public interface PeopleRepository extends JpaRepository<Person, Integer> {
 
-//    void setBooks(int book_id, int person_id);
-
-//    List<Book> findBooks(int person_id);
 }

@@ -9,6 +9,8 @@ import ru.redtoss.library.models.Book;
 import ru.redtoss.library.models.Person;
 import ru.redtoss.library.repositories.PeopleRepository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +37,8 @@ public class PeopleService {
 
     @Transactional
     public void save(Person person) {
+        person.setCreatedAt(LocalDateTime.now());
+        person.setAge(LocalDate.now().getYear() - person.getDateOfBirth().getYear());
         peopleRepository.save(person);
     }
 

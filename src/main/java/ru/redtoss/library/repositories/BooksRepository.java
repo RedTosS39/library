@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface BooksRepository extends JpaRepository<Book, Integer> {
 
     @Query("SELECT b.owner FROM Book b WHERE b.book_id = :bookId")
-    Optional<Person> findOwnerByBookId(@Param("bookId") int bookId);
+    Optional<Person> findOwnerById(@Param("bookId") int bookId);
 
 }

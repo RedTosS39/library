@@ -275,6 +275,16 @@
                 <span class="adult" th:if="*{age >= 18}">(Совершеннолетний)</span>
             </div>
         </div>
+
+        <div class="detail-row">
+            <div class="detail-label">День рождения</div>
+            <div class="detail-value" th:text="*{dateOfBirth}"></div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">создан:</div>
+            <div class="detail-value" th:text="*{createdAt}"></div>
+        </div>
     </div>
 </div>
 
