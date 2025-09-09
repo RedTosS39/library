@@ -174,10 +174,10 @@
         </div>
 
         <div class="form-group">
-            <label for="age">Возраст</label>
-            <input type="number" id="age" th:field="*{age}" required
-                   min="1" max="120" placeholder="25">
-            <div class="error-message" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></div>
+            <label for="date_of_birth">Дата рождения</label>
+            <input type="date" id="date_of_birth" th:field="*{dateOfBirth}" required
+              placeholder="08/06/1988">
+            <div class="error-message" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}"></div>
         </div>
 
         <button type="submit" class="btn">Добавить пользователя</button>

@@ -2,6 +2,8 @@ package ru.redtoss.library.services;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.redtoss.library.models.Book;
@@ -53,7 +55,7 @@ public class BooksService {
 
 
     public Optional<Person> getBookOwner(int id) {
-        Optional<Person> owner = booksRepository.findOwnerByBookId(id);
+        Optional<Person> owner = booksRepository.findOwnerById(id);
         if (owner.isPresent()) {
             Hibernate.initialize(owner.get());
             return owner;
